@@ -2,14 +2,9 @@ const { ApolloServer, gql } = require("apollo-server")
 const fs = require("fs");
 const path = require("path");
 
-// HackerNewsの1つ1つの投稿（本来はDBから取得するが今はハードコーディングを行う）
-let links = [
-  {
-    id: "link-0",
-    description: "GraphQLチュートリアルをUdemyで学ぶ",
-    url: "www.test.com"
-  },
-]
+const { PrismaClient } = require("@prisma/client")
+
+const prisma = new PrismaClient()
 
 // リゾルバ関数
 // 定義した型に対した実態（値？）を入れてあげる
@@ -17,27 +12,31 @@ let links = [
 const resolvers = {
   Query: {  // [Query]は定義した型名と合わせる
     info: () => "HackerNewsクローン",
-    feed: () => links,
+    feed: async (parent, args, context) => {
+      // linkはモデルの名前
+      return context.prisma.link.findMany();
+    },
   },
 
   Mutation: {
-    post: (parent, args) => {
-      let idCount = links.length;
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url
-      }
-
-      links.push(link);
-      return link
+    post: (parent, args, context) => {
+      const newLink = context.prisma.link.create({
+        data: {
+          url: args.url,
+          description: args.description,
+        }
+      })
+      return newLink;
     }
   },
 }
 
 // アポロサーバーをインスタンス化
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf-8"), resolvers
+  typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf-8"), resolvers, context: {
+    // resolver内で使える変数を定義できる
+    prisma
+  }
 })
 
 // 定義したスキーマとリゾルバを使って立ち上げる
