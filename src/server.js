@@ -5,19 +5,15 @@ const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 const { getUserId } = require("./utils");
 
+const Query = require('./resolvers/Query')
+
 const prisma = new PrismaClient()
 
 // リゾルバ関数
 // 定義した型に対した実態（値？）を入れてあげる
 // 何かしらの操作を加えることも出来る
 const resolvers = {
-  Query: {  // [Query]は定義した型名と合わせる
-    info: () => "HackerNewsクローン",
-    feed: async (parent, args, context) => {
-      // linkはモデルの名前
-      return context.prisma.link.findMany();
-    },
-  },
+  Query
 
   Mutation: {
     post: (parent, args, context) => {
