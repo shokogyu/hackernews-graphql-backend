@@ -15,6 +15,12 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
 }
 
+# サーバーで更新された情報があったら、リアルタイムでクライアントに表示させる
+# 新しいニュースが更新されたら、それをリアルタイムにクライアントに見せる
+type Subscription {
+  newLink: Link
+}
+
 type Link {
   id: ID!
   description: String!
