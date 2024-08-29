@@ -6,6 +6,7 @@ const { PrismaClient } = require("@prisma/client");
 const { getUserId } = require("./utils");
 
 const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
 
 const prisma = new PrismaClient()
 
@@ -13,19 +14,8 @@ const prisma = new PrismaClient()
 // 定義した型に対した実態（値？）を入れてあげる
 // 何かしらの操作を加えることも出来る
 const resolvers = {
-  Query
-
-  Mutation: {
-    post: (parent, args, context) => {
-      const newLink = context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        }
-      })
-      return newLink;
-    }
-  },
+  Query,
+  Mutation
 }
 
 // アポロサーバーをインスタンス化
