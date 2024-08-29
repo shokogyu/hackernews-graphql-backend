@@ -8,6 +8,7 @@ const { getUserId } = require("./utils");
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
 const Link = require('./resolvers/Link')
+const User = require('./resolvers/User')
 
 const prisma = new PrismaClient()
 
@@ -17,7 +18,8 @@ const prisma = new PrismaClient()
 const resolvers = {
   Query,
   Mutation,
-  Link
+  Link,
+  User
 }
 
 // アポロサーバーをインスタンス化
