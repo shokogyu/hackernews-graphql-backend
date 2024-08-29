@@ -2,7 +2,8 @@ const { ApolloServer, gql } = require("apollo-server")
 const fs = require("fs");
 const path = require("path");
 
-const { PrismaClient } = require("@prisma/client")
+const { PrismaClient } = require("@prisma/client");
+const { getUserId } = require("./utils");
 
 const prisma = new PrismaClient()
 
@@ -33,9 +34,13 @@ const resolvers = {
 
 // アポロサーバーをインスタンス化
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf-8"), resolvers, context: {
+  typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf-8"), resolvers, context: ({ req }) => {
     // resolver内で使える変数を定義できる
-    prisma
+    return {
+      ...req,
+      prisma,
+      userId: req && req.headers.authorization ? getUserId(req) : null,
+    }
   }
 })
 
