@@ -7,9 +7,10 @@ const { getUserId } = require("./utils");
 
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
+const Subscription = require('./resolvers/Subscription')
 const Link = require('./resolvers/Link')
 const User = require('./resolvers/User')
-const Subscription = require('./resolvers/Subscription')
+const Vote = require('./resolvers/Vote')
 
 // サブスクリプションの実装
 // Publisher（送信者）/Subscripber（受信者）
@@ -26,7 +27,8 @@ const resolvers = {
   Mutation,
   Subscription,
   Link,
-  User
+  User,
+  Vote,
 }
 
 // アポロサーバーをインスタンス化

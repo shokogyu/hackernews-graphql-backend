@@ -20,6 +20,7 @@ type Mutation {
 # 新しいニュースが更新されたら、それをリアルタイムにクライアントに見せる
 type Subscription {
   newLink: Link
+  newVote: Vote
 }
 
 type Vote {
